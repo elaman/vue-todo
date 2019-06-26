@@ -6,7 +6,8 @@ const state = {
   authenticating: false,
   accessToken: TokenService.getToken(),
   authenticationErrorCode: 0,
-  authenticationError: ""
+  authenticationError: "",
+  refreshTokenPromise: null
 };
 
 const getters = {
@@ -54,6 +55,25 @@ const actions = {
     UserService.logout();
     commit("logoutSuccess");
     router.push("/login");
+  },
+
+  refreshToken({ commit, state }) {
+    if (!state.refreshTokenPromise) {
+      const p = UserService.refreshToken();
+      commit("refreshTokenPromise", p);
+
+      p.then(
+        response => {
+          commit("refreshTokenPromise", null);
+          commit("loginSuccess", response);
+        },
+        error => {
+          commit("refreshTokenPromise", null);
+        }
+      );
+    }
+
+    return state.refreshTokenPromise;
   }
 };
 
@@ -77,6 +97,10 @@ const mutations = {
 
   logoutSuccess(state) {
     state.accessToken = "";
+  },
+
+  refreshTokenPromise(state, promise) {
+    state.refreshTokenPromise = promise;
   }
 };
 

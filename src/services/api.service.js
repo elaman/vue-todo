@@ -1,7 +1,10 @@
 import axios from "axios";
 import { TokenService } from "../services/token.service";
+import { store } from "../store";
 
 const ApiService = {
+  _401interceptor: null,
+
   init(baseURL) {
     axios.defaults.baseURL = baseURL;
   },
@@ -34,6 +37,40 @@ const ApiService = {
 
   customRequest(data) {
     return axios(data);
+  },
+
+  mount401Interceptor() {
+    this._401interceptor = axios.interceptors.response.use(
+      response => {
+        return response;
+      },
+      async error => {
+        if (error.request.status === 401) {
+          if (error.config.url.includes("/o/token/")) {
+            store.dispatch("auth/logout");
+            throw error;
+          } else {
+            try {
+              await store.dispatch("auth/refreshToken");
+
+              return this.customRequest({
+                method: error.config.method,
+                url: error.config.url,
+                data: error.config.data
+              });
+            } catch (e) {
+              throw error;
+            }
+          }
+        }
+
+        throw error;
+      }
+    );
+  },
+
+  unmount401Interceptor() {
+    axios.interceptors.response.eject(this._401interceptor);
   }
 };
 
