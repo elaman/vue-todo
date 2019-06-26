@@ -2,7 +2,7 @@ import Vue from "vue";
 import Router from "vue-router";
 import Home from "./views/Home.vue";
 import LoginView from "./views/LoginView.vue";
-import { TokenService } from "./services/storage.service";
+import { TokenService } from "./services/token.service";
 
 Vue.use(Router);
 
