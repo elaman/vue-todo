@@ -1,5 +1,5 @@
 import { UserService, AuthenticationError } from "../services/user.service";
-import { TokenService } from "../services/storage.service";
+import { TokenService } from "../services/token.service";
 import router from "../router";
 
 const state = {
@@ -29,11 +29,11 @@ const getters = {
 };
 
 const actions = {
-  async login({ commit }, { email, password }) {
+  async login({ commit }, { username, password }) {
     commit("loginRequest");
 
     try {
-      const token = await UserService.login(email, password);
+      const token = await UserService.login(username, password);
       commit("loginSuccess", token);
 
       router.push(router.history.current.query.redirect || "/");

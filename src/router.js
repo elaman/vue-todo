@@ -1,7 +1,7 @@
 import Vue from "vue";
 import Router from "vue-router";
 import Home from "./views/Home.vue";
-import LoginView from "./views/LoginView.vue";
+import Login from "./views/Login.vue";
 import { TokenService } from "./services/token.service";
 
 Vue.use(Router);
@@ -18,7 +18,7 @@ const router = new Router({
     {
       path: "/login",
       name: "login",
-      component: LoginView,
+      component: Login,
       meta: {
         public: true, // Allow access to even if not logged in
         onlyWhenLoggedOut: true

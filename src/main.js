@@ -1,6 +1,6 @@
 import Vue from "vue";
-import router from "./router";
 import ApiService from "./services/api.service";
+import router from "./router";
 import { TokenService } from "./services/token.service";
 
 ApiService.init("https://dev-d8-charts.pantheonsite.io");
@@ -9,8 +9,11 @@ if (TokenService.getToken()) {
   ApiService.setHeader();
 }
 
-Vue.config.productionTip = false;
-
 new Vue({
-  router
+  router,
+  template: `
+    <div>
+      <router-view class="view"></router-view>
+    </div>
+  `
 }).$mount("#app");
