@@ -1,5 +1,5 @@
 import Vue from "vue";
-import App from "./App.vue";
+import router from "./router";
 import ApiService from "./services/api.service";
 import { TokenService } from "./services/token.service";
 
@@ -12,5 +12,5 @@ if (TokenService.getToken()) {
 Vue.config.productionTip = false;
 
 new Vue({
-  render: h => h(App)
+  router
 }).$mount("#app");
