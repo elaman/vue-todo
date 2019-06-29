@@ -1,5 +1,5 @@
 <template>
-  <form @submit="handleSubmit">
+  <form @submit.prevent="handleSubmit" action="#" method="post">
     <label for="username">
       Username:
       <input id="username" v-model="username">
@@ -14,14 +14,17 @@
 
 <script>
 import { mapGetters, mapActions } from "vuex";
+
 export default {
   name: "login",
+
   data() {
     return {
       username: "",
       password: ""
     };
   },
+
   computed: {
     ...mapGetters("auth", [
       "authenticating",
@@ -29,6 +32,7 @@ export default {
       "authenticationErrorCode"
     ])
   },
+  
   methods: {
     ...mapActions("auth", ["login"]),
     handleSubmit() {
