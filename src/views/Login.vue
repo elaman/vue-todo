@@ -1,15 +1,19 @@
 <template>
-  <form @submit.prevent="handleSubmit" action="#" method="post">
-    <label for="username">
-      Username:
-      <input id="username" v-model="username">
-    </label>
-    <label for="password">
-      Password:
-      <input id="password" v-model="password">
-    </label>
-    <input type="submit" value="Submit">
-  </form>
+  <div>
+    <h1>Login</h1>
+
+    <form @submit.prevent="handleSubmit" action="#" method="post">
+      <label for="username">
+        Username:
+        <input id="username" v-model="username">
+      </label>
+      <label for="password">
+        Password:
+        <input id="password" v-model="password">
+      </label>
+      <button type="submit">Login</button>
+    </form>
+  </div>
 </template>
 
 <script>
