@@ -1,5 +1,6 @@
 import ApiService from "./api.service";
 import { TokenService } from "./token.service";
+import qs from "qs";
 
 const CLIENT_ID = process.env.VUE_APP_CLIENT_ID;
 const CLIENT_SECRET = process.env.VUE_APP_CLIENT_SECRET;
@@ -18,15 +19,14 @@ const UserService = {
     const requestData = {
       method: "post",
       url: "/oauth/token",
-      data: {
+      headers: { 'content-type': 'application/x-www-form-urlencoded' },
+      data: qs.stringify({
         grant_type: "password",
         username: email,
-        password: password
-      },
-      auth: {
-        username: CLIENT_ID,
-        password: CLIENT_SECRET
-      }
+        password: password,
+        client_id: CLIENT_ID,
+        client_secret: CLIENT_SECRET
+      })
     };
 
     try {
@@ -53,14 +53,13 @@ const UserService = {
     const requestData = {
       method: "post",
       url: "/oauth/token",
-      data: {
+      headers: { 'content-type': 'application/x-www-form-urlencoded' },
+      data: qs.stringify({
         grant_type: "refresh_token",
-        refresh_token: refreshToken
-      },
-      auth: {
-        username: CLIENT_ID,
-        password: CLIENT_SECRET
-      }
+        refresh_token: refreshToken,
+        client_id: CLIENT_ID,
+        client_secret: CLIENT_SECRET
+      })
     };
 
     try {
