@@ -1,17 +1,15 @@
 <template>
-  <div>
-    <h1>Login</h1>
+  <div class="col-md-3 py-3">
+    <h1 class="display-4 mb-5 text-center">Login</h1>
 
-    <form @submit.prevent="handleSubmit" action="#" method="post">
-      <label for="username">
-        Username:
-        <input id="username" v-model="username">
-      </label>
-      <label for="password">
-        Password:
-        <input id="password" v-model="password">
-      </label>
-      <button type="submit">Login</button>
+    <form @submit.prevent="handleSubmit" class=" text-center">
+      <div class="form-group">
+        <input type="text" v-model="username" class="form-control" placeholder="Username" />
+      </div>
+      <div class="form-group">
+        <input type="password" v-model="password" class="form-control" placeholder="Password">
+      </div>
+      <button type="submit" class="btn btn-primary">Login</button>
     </form>
   </div>
 </template>
