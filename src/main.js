@@ -4,7 +4,7 @@ import router from "./router";
 import { TokenService } from "./services/token.service";
 import store from "./store";
 
-ApiService.init("https://dev-d8-charts.pantheonsite.io");
+ApiService.init(process.env.TODO_API_URL);
 
 if (TokenService.getToken()) {
   ApiService.setHeader();

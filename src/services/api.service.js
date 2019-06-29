@@ -46,7 +46,7 @@ const ApiService = {
       },
       async error => {
         if (error.request.status === 401) {
-          if (error.config.url.includes("/o/token/")) {
+          if (error.config.url.includes("/oauth/token")) {
             store.dispatch("auth/logout");
             throw error;
           } else {

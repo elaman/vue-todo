@@ -1,8 +1,8 @@
 import ApiService from "./api.service";
 import { TokenService } from "./token.service";
 
-const CLIENT_ID = "access_token";
-const CLIENT_SECRET = "refresh_token";
+const CLIENT_ID = process.env.VUE_APP_CLIENT_ID;
+const CLIENT_SECRET = process.env.VUE_APP_CLIENT_SECRET;
 
 class AuthenticationError extends Error {
   constructor(errorCode, message) {
@@ -17,7 +17,7 @@ const UserService = {
   login: async function(email, password) {
     const requestData = {
       method: "post",
-      url: "/o/token/",
+      url: "/oauth/token",
       data: {
         grant_type: "password",
         username: email,
@@ -52,7 +52,7 @@ const UserService = {
 
     const requestData = {
       method: "post",
-      url: "/o/token/",
+      url: "/oauth/token",
       data: {
         grant_type: "refresh_token",
         refresh_token: refreshToken
