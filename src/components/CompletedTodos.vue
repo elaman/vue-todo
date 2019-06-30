@@ -1,7 +1,7 @@
 <template>
   <div class="card">
     <div class="card-header">
-      Current
+      Completed
       <span class="badge badge-info">{{completedTodos.length}}</span>
     </div>
     <div v-for="todo in completedTodos" v-bind:key="todo.id" class="card-body">

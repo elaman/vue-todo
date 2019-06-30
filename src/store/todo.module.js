@@ -1,4 +1,4 @@
-import TodoService from "../services/todo.service";
+import { TodoService, TodoError } from "../services/todo.service";
 
 const state = {
   todos: [],
@@ -23,12 +23,22 @@ const actions = {
 
       commit('LOAD_TODOS', todos)
     } catch (e) {
-      // 
+      if (e instanceof TodoError) {
+        //
+      }
     }
   },
 
-  addTodo({commit}){
-    commit('ADD_TODO')
+  async addTodo({commit, state}){
+    try {
+      const newTodo = await TodoService.insert(state.newTodo);
+
+      commit('ADD_TODO', newTodo);
+    } catch (e) {
+      if (e instanceof TodoError) {
+        //
+      }
+    }
   },
 
   editTodo({commit}, todo){
@@ -57,12 +67,8 @@ const mutations = {
     state.todos = [...todos];
   },
 
-  ADD_TODO(state){
-    state.todos.push({
-      id: Math.random().toString(36).substring(2, 15),
-      body: state.newTodo,
-      completed: false
-    })
+  ADD_TODO(state, todo){
+    state.todos.push(todo)
   },
 
   EDIT_TODO(state, todo){

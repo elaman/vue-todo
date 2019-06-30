@@ -17,8 +17,51 @@ const TodoService = {
       return response.data.map(todo => ({
         nid: todo.nid[0].value,
         body: todo.title[0].value,
-        completed: !status
+        completed: status
       }));
+    } catch (error) {
+      throw new TodoError(
+        error.response.status,
+        error.response.data.detail
+      );
+    }
+  },
+
+  insert: async function(title) {
+    const csrfToken = await this.getCsrfToken();
+
+    const requestData = {
+      method: "post",
+      url: "/node?_format=json",
+      headers: { 'X-CSRF-Token': csrfToken },
+      data: {
+        type: "todo",
+        title: [title],
+        status: [false]
+      }
+    };
+
+    try {
+      const response = await ApiService.customRequest(requestData);
+
+      return {
+        id: response.data.nid[0].value,
+        body: response.data.title[0].value,
+        completed: response.data.status[0].value,
+      };
+    } catch (error) {
+      throw new TodoError(
+        error.response.status,
+        error.response.data.detail
+      );
+    }
+  },
+
+  getCsrfToken: async function() {
+    try {
+      const response = await ApiService.get("/session/token");
+
+      return response.data;
     } catch (error) {
       throw new TodoError(
         error.response.status,
