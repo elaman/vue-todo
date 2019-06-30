@@ -1,3 +1,5 @@
+import TodoService from "../services/todo.service";
+
 const state = {
   todos: [],
   newTodo: ''
@@ -13,6 +15,16 @@ const getters = {
 const actions = {
   getTodo({commit}, todo){
     commit('GET_TODO', todo)
+  },
+
+  async loadTodos({commit}){
+    try {
+      const todos = await TodoService.getAll();
+
+      commit('LOAD_TODOS', todos)
+    } catch (e) {
+      // 
+    }
   },
 
   addTodo({commit}){
@@ -39,6 +51,10 @@ const actions = {
 const mutations = {
   GET_TODO(state, todo){
     state.newTodo = todo
+  },
+
+  LOAD_TODOS(state, todos){
+    state.todos = [...todos];
   },
 
   ADD_TODO(state){
