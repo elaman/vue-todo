@@ -30,18 +30,18 @@ const getters = {
 
 const actions = {
   async login({ commit }, { username, password }) {
-    commit("loginRequest");
+    commit("LOGIN_REQUEST");
 
     try {
       const token = await UserService.login(username, password);
-      commit("loginSuccess", token);
+      commit("LOGIN_SUCCESS", token);
 
       router.push(router.history.current.query.redirect || "/");
 
       return true;
     } catch (e) {
       if (e instanceof AuthenticationError) {
-        commit("loginError", {
+        commit("LOGIN_ERROR", {
           errorCode: e.errorCode,
           errorMessage: e.message
         });
@@ -53,22 +53,22 @@ const actions = {
 
   logout({ commit }) {
     UserService.logout();
-    commit("logoutSuccess");
+    commit("LOGOUT_SUCCESS");
     router.push("/login");
   },
 
   refreshToken({ commit, state }) {
     if (!state.refreshTokenPromise) {
-      const p = UserService.refreshToken();
-      commit("refreshTokenPromise", p);
+      const promise = UserService.refreshToken();
+      commit("REFRESH_TOKEN_PROMISE", promise);
 
-      p.then(
+      promise.then(
         response => {
-          commit("refreshTokenPromise", null);
-          commit("loginSuccess", response);
+          commit("REFRESH_TOKEN_PROMISE", null);
+          commit("LOGIN_SUCCESS", response);
         },
         () => {
-          commit("refreshTokenPromise", null);
+          commit("REFRESH_TOKEN_PROMISE", null);
         }
       );
     }
@@ -78,28 +78,28 @@ const actions = {
 };
 
 const mutations = {
-  loginRequest(state) {
+  LOGIN_REQUEST(state) {
     state.authenticating = true;
     state.authenticationError = "";
     state.authenticationErrorCode = 0;
   },
 
-  loginSuccess(state, accessToken) {
+  LOGIN_SUCCESS(state, accessToken) {
     state.accessToken = accessToken;
     state.authenticating = false;
   },
 
-  loginError(state, { errorCode, errorMessage }) {
+  LOGIN_ERROR(state, { errorCode, errorMessage }) {
     state.authenticating = false;
     state.authenticationErrorCode = errorCode;
     state.authenticationError = errorMessage;
   },
 
-  logoutSuccess(state) {
+  LOGOUT_SUCCESS(state) {
     state.accessToken = "";
   },
 
-  refreshTokenPromise(state, promise) {
+  REFRESH_TOKEN_PROMISE(state, promise) {
     state.refreshTokenPromise = promise;
   }
 };
