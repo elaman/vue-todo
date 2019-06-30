@@ -20,7 +20,7 @@ const TodoService = {
         completed: node.field_completed[0].value
       }));
     } catch (error) {
-      throw new TodoError(error.response.status, error.response.data.detail);
+      throw new TodoError(error.response.status, error.response.message);
     }
   },
 
@@ -47,7 +47,7 @@ const TodoService = {
         completed: response.data.field_completed[0].value
       };
     } catch (error) {
-      throw new TodoError(error.response.status, error.response.data.detail);
+      throw new TodoError(error.response.status, error.response.message);
     }
   },
 
@@ -74,7 +74,7 @@ const TodoService = {
         completed: response.data.status[0].value
       };
     } catch (error) {
-      throw new TodoError(error.response.status, error.response.data.detail);
+      throw new TodoError(error.response.status, error.response.message);
     }
   },
 
@@ -90,7 +90,7 @@ const TodoService = {
     try {
       await ApiService.customRequest(requestData);
     } catch (error) {
-      throw new TodoError(error.response.status, error.response.data.detail);
+      throw new TodoError(error.response.status, error.response.message);
     }
   },
 
@@ -100,7 +100,7 @@ const TodoService = {
 
       return response.data;
     } catch (error) {
-      throw new TodoError(error.response.status, error.response.data.detail);
+      throw new TodoError(error.response.status, error.response.message);
     }
   }
 };
