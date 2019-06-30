@@ -1,18 +1,32 @@
+import ApiService from "./api.service";
+
 const TodoService = {
-  insertTodo(todo){
+  async insert(todo){
+    const csrf = this.getCsrf();
 
+    return false;
   },
 
-  updateTodo(todo){
+  async update(todo){
+    const csrf = this.getCsrf();
 
+    return false;
   },
 
-  deleteTodo(todo){
-    
+  async delete(todo){
+    const csrf = this.getCsrf();
+
+    return false;
   },
 
-  getCsrf(){
+  async getCsrf(){
+    try {
+      const response = await ApiService.get("/session/token");
 
+      return response.data;
+    } catch (error) {
+      return false;
+    }
   },
 };
 

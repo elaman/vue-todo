@@ -1,3 +1,5 @@
+import { TodoService } from "../services/todo.service";
+
 const state = {
   todos: [],
   newTodo: ''
@@ -11,37 +13,57 @@ const getters = {
 };
 
 const actions = {
-  getTodo({commit}, todo){
+  getTodo({commit}, todo) {
     commit('GET_TODO', todo)
   },
 
-  addTodo({commit}){
-    commit('ADD_TODO')
+  async addTodo({commit}) {
+    try {
+      await TodoService.insert({
+        body: state.newTodo
+      });
+
+      commit('ADD_TODO')
+    } catch (error) {
+      //
+    }
   },
 
-  editTodo({commit}, todo){
-    commit('EDIT_TODO', todo)
+  async editTodo({commit}, todo) {
+    try {
+      await TodoService.update(todo);
+
+      commit('EDIT_TODO', todo)
+    } catch (error) {
+      //
+    }
   },
 
-  removeTodo({commit}, todo){
-    commit('REMOVE_TODO', todo)
+  async removeTodo({commit}, todo) {
+    try {
+      await TodoService.delete(todo);
+
+      commit('REMOVE_TODO', todo)
+    } catch (error) {
+      //
+    }
   },
 
-  completeTodo({commit}, todo){
+  completeTodo({commit}, todo) {
    commit('COMPLETE_TODO', todo)
   },
 
-  clearTodo({commit}){
+  clearTodo({commit}) {
     commit('CLEAR_TODO')
   }
 };
 
 const mutations = {
-  GET_TODO(state, todo){
+  GET_TODO(state, todo) {
     state.newTodo = todo
   },
 
-  ADD_TODO(state){
+  ADD_TODO(state) {
     state.todos.push({
       id: Math.random().toString(36).substring(2, 15),
       body: state.newTodo,
@@ -49,23 +71,23 @@ const mutations = {
     })
   },
 
-  EDIT_TODO(state, todo){
+  EDIT_TODO(state, todo) {
      var todos = state.todos
      todos.splice(todos.indexOf(todo), 1)
      state.todos = todos
      state.newTodo = todo.body
   },
 
-  REMOVE_TODO(state, todo){
+  REMOVE_TODO(state, todo) {
      var todos = state.todos
      todos.splice(todos.indexOf(todo), 1)
   },
 
-  COMPLETE_TODO(state, todo){
+  COMPLETE_TODO(state, todo) {
     todo.completed = !todo.completed
   },
 
-  CLEAR_TODO(state){
+  CLEAR_TODO(state) {
     state.newTodo = ''
   }
 };
