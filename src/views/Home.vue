@@ -19,12 +19,19 @@
 import NewTodo from "../components/NewTodo.vue";
 import CurrentTodos from "../components/CurrentTodos.vue";
 import CompletedTodos from "../components/CompletedTodos.vue";
+import { mapActions } from "vuex";
 
 export default {
   components: {
     NewTodo,
     CurrentTodos,
     CompletedTodos
-  }
+  },
+  mounted() {
+    this.loadTodos();
+  },
+  methods: {
+    ...mapActions("todo", ["loadTodos"])
+  },
 };
 </script>

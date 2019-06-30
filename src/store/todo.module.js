@@ -1,4 +1,4 @@
-import { TodoService } from "../services/todo.service";
+import { TodoService, TodoError } from "../services/todo.service";
 
 const state = {
   todos: [],
@@ -17,40 +17,59 @@ const actions = {
     commit('GET_TODO', todo)
   },
 
-  async addTodo({commit}) {
+  async loadTodos({commit}){
     try {
-      await TodoService.insert({
-        body: state.newTodo
+      const todos = await TodoService.getAll();
+
+      commit('LOAD_TODOS', todos)
+    } catch (e) {
+      if (e instanceof TodoError) {
+        //
+      }
+    }
+  },
+
+  async addTodo({commit, state}){
+    try {
+      const todo = await TodoService.insert({
+        title: state.newTodo
       });
 
-      commit('ADD_TODO')
-    } catch (error) {
-      //
+      commit('ADD_TODO', todo);
+    } catch (e) {
+      if (e instanceof TodoError) {
+        //
+      }
     }
   },
 
-  async editTodo({commit}, todo) {
+  async removeTodo({commit}, todo){
     try {
-      await TodoService.update(todo);
-
-      commit('EDIT_TODO', todo)
-    } catch (error) {
-      //
-    }
-  },
-
-  async removeTodo({commit}, todo) {
-    try {
-      await TodoService.delete(todo);
+      await TodoService.delete({
+        id: todo.id
+      });
 
       commit('REMOVE_TODO', todo)
-    } catch (error) {
-      //
+    } catch (e) {
+      if (e instanceof TodoError) {
+        //
+      }
     }
   },
 
-  completeTodo({commit}, todo) {
-   commit('COMPLETE_TODO', todo)
+  async completeTodo({commit}, todo){
+    try {
+      await TodoService.update({
+        ...todo,
+        completed: !todo.completed
+      });
+
+      commit('COMPLETE_TODO', todo)
+    } catch (e) {
+      if (e instanceof TodoError) {
+        //
+      }
+    }
   },
 
   clearTodo({commit}) {
@@ -63,19 +82,12 @@ const mutations = {
     state.newTodo = todo
   },
 
-  ADD_TODO(state) {
-    state.todos.push({
-      id: Math.random().toString(36).substring(2, 15),
-      body: state.newTodo,
-      completed: false
-    })
+  LOAD_TODOS(state, todos){
+    state.todos = [...todos];
   },
 
-  EDIT_TODO(state, todo) {
-     var todos = state.todos
-     todos.splice(todos.indexOf(todo), 1)
-     state.todos = todos
-     state.newTodo = todo.body
+  ADD_TODO(state, todo){
+    state.todos.push(todo)
   },
 
   REMOVE_TODO(state, todo) {
