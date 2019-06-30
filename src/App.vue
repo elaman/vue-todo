@@ -1,7 +1,7 @@
 <template>
   <div class="vue-todo-app">
-    <div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 border-bottom shadow-sm">
-      <h3 class="my-0 mr-md-auto font-weight-normal">ToDo App</h3>
+    <div class="d-flex flex-row align-items-center p-3 px-4 mb-3 border-bottom shadow-sm">
+      <h3 class="my-0 mr-auto font-weight-normal">ToDo App</h3>
       <button class="btn btn-sm btn-warning" v-if="loggedIn" @click.prevent="logout">Log out</button>
     </div>
     <div class="container">
