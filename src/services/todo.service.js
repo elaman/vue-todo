@@ -14,10 +14,10 @@ const TodoService = {
     try {
       const response = await ApiService.get("/node/todos?_format=json");
 
-      return response.data.map(todo => ({
-        id: todo.nid[0].value,
-        body: todo.title[0].value,
-        completed: status
+      return response.data.map(node => ({
+        id: node.nid[0].value,
+        title: node.title[0].value,
+        completed: node.field_completed[0].value
       }));
     } catch (error) {
       throw new TodoError(
@@ -27,7 +27,7 @@ const TodoService = {
     }
   },
 
-  insert: async function(title) {
+  insert: async function(todo) {
     const csrfToken = await this.getCsrfToken();
 
     const requestData = {
@@ -36,7 +36,7 @@ const TodoService = {
       headers: { 'X-CSRF-Token': csrfToken },
       data: {
         type: "todo",
-        title: [title],
+        title: [todo.title],
         status: [false]
       }
     };
@@ -46,7 +46,7 @@ const TodoService = {
 
       return {
         id: response.data.nid[0].value,
-        body: response.data.title[0].value,
+        title: response.data.title[0].value,
         completed: response.data.field_completed[0].value
       };
     } catch (error) {
@@ -87,12 +87,12 @@ const TodoService = {
     }
   },
 
-  delete: async function(id) {
+  delete: async function(todo) {
     const csrfToken = await this.getCsrfToken();
 
     const requestData = {
       method: "delete",
-      url: `/node/${id}?_format=json`,
+      url: `/node/${todo.id}?_format=json`,
       headers: { 'X-CSRF-Token': csrfToken }
     };
 

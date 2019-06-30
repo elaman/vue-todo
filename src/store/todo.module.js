@@ -31,9 +31,11 @@ const actions = {
 
   async addTodo({commit, state}){
     try {
-      const newTodo = await TodoService.insert(state.newTodo);
+      const todo = await TodoService.insert({
+        title: state.newTodo
+      });
 
-      commit('ADD_TODO', newTodo);
+      commit('ADD_TODO', todo);
     } catch (e) {
       if (e instanceof TodoError) {
         //
@@ -41,13 +43,11 @@ const actions = {
     }
   },
 
-  editTodo({commit}, todo){
-    commit('EDIT_TODO', todo)
-  },
-
   async removeTodo({commit}, todo){
     try {
-      await TodoService.delete(todo.id);
+      await TodoService.delete({
+        id: todo.id
+      });
 
       commit('REMOVE_TODO', todo)
     } catch (e) {
@@ -88,13 +88,6 @@ const mutations = {
 
   ADD_TODO(state, todo){
     state.todos.push(todo)
-  },
-
-  EDIT_TODO(state, todo){
-     var todos = state.todos
-     todos.splice(todos.indexOf(todo), 1)
-     state.todos = todos
-     state.newTodo = todo.body
   },
 
   REMOVE_TODO(state, todo){
