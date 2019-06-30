@@ -17,7 +17,12 @@
 import { mapGetters, mapActions } from "vuex";
 
 export default {
-  methods: { ...mapActions("todo", ["removeTodo"]) },
-  computed: { ...mapGetters("todo", ["completedTodos"]) }
+  methods: {
+    ...mapActions("todo", ["removeTodo"])
+  },
+
+  computed: {
+    ...mapGetters("todo", ["completedTodos"])
+  }
 };
 </script>

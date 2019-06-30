@@ -15,12 +15,16 @@
 </template>
 
 <script>
+// Map variables and methods from todo store.
 import { mapGetters, mapActions } from "vuex";
 
 export default {
   methods: {
     ...mapActions("todo", ["completeTodo", "removeTodo"])
   },
-  computed: { ...mapGetters("todo", ["currentTodos"]) }
+
+  computed: {
+    ...mapGetters("todo", ["currentTodos"])
+  }
 };
 </script>

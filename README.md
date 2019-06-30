@@ -87,7 +87,7 @@ To use `/oauth/token` endpoint for a token refresh you must do `POST` request, s
 If you visit `/admin/config/services/rest` you can see which paths you can use as endpoints. Two requirements:
 
 - All the requests need authentication, which is `Bearer {access_token}` in the request header.
-- All requests must have `?format=json` in the end, so it returns JSON.
+- All requests must have `?_format=json` in the end, so it returns JSON.
 
  Apart from that Drupal categorizes all requests as safe (GET) and unsafe (POST, PATCH, DELETE, PUT):
 

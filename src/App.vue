@@ -13,6 +13,7 @@
 </template>
 
 <script>
+// Map variables and methods from auth store.
 import { mapGetters, mapActions } from "vuex";
 
 export default {

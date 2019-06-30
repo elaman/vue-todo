@@ -1,5 +1,6 @@
 import ApiService from "./api.service";
 
+// Special type of error for auth errors.
 class TodoError extends Error {
   constructor(errorCode, message) {
     super(message);
@@ -9,9 +10,15 @@ class TodoError extends Error {
   }
 }
 
+// Service that is used to perform REST requests via ApiService class.
+// Please read README.md file for details and information links.
+// REST requests and responses require special json structure.
+// For response samples see: https://gist.github.com/elaman/6a8f64caa5937194e662389210a9b8b8
 const TodoService = {
+
   getAll: async function() {
     try {
+      // GET request to get all todos, doesn't require special request.
       const response = await ApiService.get("/node/todos?_format=json");
 
       return response.data.map(node => ({
@@ -25,6 +32,7 @@ const TodoService = {
   },
 
   insert: async function(todo) {
+    // POST request needs csrf token. See method definition for details.
     const csrfToken = await this.getCsrfToken();
 
     const requestData = {
@@ -32,9 +40,11 @@ const TodoService = {
       url: "/node?_format=json",
       headers: { "X-CSRF-Token": csrfToken },
       data: {
+        // type is required.
         type: "todo",
+        // fields values must be in array.
         title: [todo.title],
-        status: [false]
+        field_completed: [false]
       }
     };
 
@@ -52,6 +62,7 @@ const TodoService = {
   },
 
   update: async function(todo) {
+    // PATCH request needs csrf token. See method definition for details.
     const csrfToken = await this.getCsrfToken();
 
     const requestData = {
@@ -59,7 +70,9 @@ const TodoService = {
       url: `/node/${todo.id}?_format=json`,
       headers: { "X-CSRF-Token": csrfToken },
       data: {
+        // type is required.
         type: "todo",
+        // fields values must be in array.
         title: [todo.title],
         field_completed: [todo.completed]
       }
@@ -79,6 +92,7 @@ const TodoService = {
   },
 
   delete: async function(todo) {
+    // DELETE request needs csrf token. See method definition for details.
     const csrfToken = await this.getCsrfToken();
 
     const requestData = {
@@ -96,6 +110,9 @@ const TodoService = {
 
   getCsrfToken: async function() {
     try {
+      // CSRF token request doesn't require special request.
+      // Returns string, not JSON.
+      // Please see README.md for details.
       const response = await ApiService.get("/session/token");
 
       return response.data;

@@ -16,6 +16,7 @@
 </template>
 
 <script>
+// Map variables and methods from todo store.
 import NewTodo from "../components/NewTodo.vue";
 import CurrentTodos from "../components/CurrentTodos.vue";
 import CompletedTodos from "../components/CompletedTodos.vue";
@@ -27,9 +28,12 @@ export default {
     CurrentTodos,
     CompletedTodos
   },
+
+  // Load todos using todo store on view load.
   mounted() {
     this.loadTodos();
   },
+
   methods: {
     ...mapActions("todo", ["loadTodos"])
   }

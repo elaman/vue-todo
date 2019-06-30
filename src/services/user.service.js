@@ -2,9 +2,11 @@ import ApiService from "./api.service";
 import { TokenService } from "./token.service";
 import qs from "qs";
 
+// Loaded form the .env.local file.
 const CLIENT_ID = process.env.VUE_APP_CLIENT_ID;
 const CLIENT_SECRET = process.env.VUE_APP_CLIENT_SECRET;
 
+// Special type of error for auth errors.
 class AuthenticationError extends Error {
   constructor(errorCode, message) {
     super(message);
@@ -14,13 +16,19 @@ class AuthenticationError extends Error {
   }
 }
 
+// Service that is used to perform REST requests via ApiService class.
+// Please read README.md file for details and information links.
 const UserService = {
+
   login: async function(email, password) {
+    // OAuth request requires a very special request.
     const requestData = {
       method: "post",
       url: "/oauth/token",
+      // It accepts only application/x-www-form-urlencoded requests.
       headers: { "content-type": "application/x-www-form-urlencoded" },
       data: qs.stringify({
+        // All this data is required as well.
         grant_type: "password",
         username: email,
         password: password,
@@ -30,8 +38,10 @@ const UserService = {
     };
 
     try {
+      // Perform request.
       const response = await ApiService.customRequest(requestData);
 
+      // Process the response.
       TokenService.saveToken(response.data.access_token);
       TokenService.saveRefreshToken(response.data.refresh_token);
       ApiService.setHeader();
@@ -50,11 +60,14 @@ const UserService = {
   refreshToken: async function() {
     const refreshToken = TokenService.getRefreshToken();
 
+    // OAuth request requires a very special request.
     const requestData = {
       method: "post",
       url: "/oauth/token",
+      // It accepts only application/x-www-form-urlencoded requests.
       headers: { "content-type": "application/x-www-form-urlencoded" },
       data: qs.stringify({
+        // All this data is required as well.
         grant_type: "refresh_token",
         refresh_token: refreshToken,
         client_id: CLIENT_ID,
@@ -63,8 +76,10 @@ const UserService = {
     };
 
     try {
+      // Perform request.
       const response = await ApiService.customRequest(requestData);
 
+      // Process the response.
       TokenService.saveToken(response.data.access_token);
       TokenService.saveRefreshToken(response.data.refresh_token);
       ApiService.setHeader();

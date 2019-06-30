@@ -2,6 +2,7 @@ import { UserService, AuthenticationError } from "../services/user.service";
 import { TokenService } from "../services/token.service";
 import router from "../router";
 
+// Authentication tokens, errors and state.
 const state = {
   authenticating: false,
   accessToken: TokenService.getToken(),
@@ -10,6 +11,7 @@ const state = {
   refreshTokenPromise: null
 };
 
+// Computed variables.
 const getters = {
   loggedIn: state => {
     return state.accessToken ? true : false;
@@ -28,7 +30,10 @@ const getters = {
   }
 };
 
+// Actions change store state.
+// All the async functions rely on REST requests.
 const actions = {
+  // Use method from UserService class, to get access token.
   async login({ commit }, { username, password }) {
     commit("LOGIN_REQUEST");
 
@@ -51,12 +56,14 @@ const actions = {
     }
   },
 
+  // Logout doesn't require any REST calls, just remove tokens.
   logout({ commit }) {
     UserService.logout();
     commit("LOGOUT_SUCCESS");
     router.push("/login");
   },
 
+  // Perform access token refresh.
   refreshToken({ commit, state }) {
     if (!state.refreshTokenPromise) {
       const promise = UserService.refreshToken();
@@ -77,6 +84,7 @@ const actions = {
   }
 };
 
+// Manage store.
 const mutations = {
   LOGIN_REQUEST(state) {
     state.authenticating = true;

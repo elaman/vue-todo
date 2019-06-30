@@ -1,6 +1,8 @@
 const TOKEN_KEY = "access_token";
 const REFRESH_TOKEN_KEY = "refresh_token";
 
+// Store the access and refresh tokens in the localStorage.
+// Make a separate class for this, so it is easy to swap storage type later.
 const TokenService = {
   getToken() {
     return localStorage.getItem(TOKEN_KEY);
