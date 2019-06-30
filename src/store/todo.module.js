@@ -57,8 +57,19 @@ const actions = {
     }
   },
 
-  completeTodo({commit}, todo){
-   commit('COMPLETE_TODO', todo)
+  async completeTodo({commit}, todo){
+    try {
+      await TodoService.update({
+        ...todo,
+        completed: !todo.completed
+      });
+
+      commit('COMPLETE_TODO', todo)
+    } catch (e) {
+      if (e instanceof TodoError) {
+        //
+      }
+    }
   },
 
   clearTodo({commit}){

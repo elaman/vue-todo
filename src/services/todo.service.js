@@ -47,6 +47,36 @@ const TodoService = {
       return {
         id: response.data.nid[0].value,
         body: response.data.title[0].value,
+        completed: response.data.field_completed[0].value
+      };
+    } catch (error) {
+      throw new TodoError(
+        error.response.status,
+        error.response.data.detail
+      );
+    }
+  },
+
+  update: async function(todo) {
+    const csrfToken = await this.getCsrfToken();
+
+    const requestData = {
+      method: "patch",
+      url: `/node/${todo.id}?_format=json`,
+      headers: { 'X-CSRF-Token': csrfToken },
+      data: {
+        type: "todo",
+        title: [todo.title],
+        field_completed: [todo.completed]
+      }
+    };
+
+    try {
+      const response = await ApiService.customRequest(requestData);
+
+      return {
+        id: response.data.nid[0].value,
+        title: response.data.title[0].value,
         completed: response.data.status[0].value,
       };
     } catch (error) {
