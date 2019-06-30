@@ -45,8 +45,16 @@ const actions = {
     commit('EDIT_TODO', todo)
   },
 
-  removeTodo({commit}, todo){
-    commit('REMOVE_TODO', todo)
+  async removeTodo({commit}, todo){
+    try {
+      await TodoService.delete(todo.id);
+
+      commit('REMOVE_TODO', todo)
+    } catch (e) {
+      if (e instanceof TodoError) {
+        //
+      }
+    }
   },
 
   completeTodo({commit}, todo){
