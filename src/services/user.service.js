@@ -19,7 +19,7 @@ const UserService = {
     const requestData = {
       method: "post",
       url: "/oauth/token",
-      headers: { 'content-type': 'application/x-www-form-urlencoded' },
+      headers: { "content-type": "application/x-www-form-urlencoded" },
       data: qs.stringify({
         grant_type: "password",
         username: email,
@@ -53,7 +53,7 @@ const UserService = {
     const requestData = {
       method: "post",
       url: "/oauth/token",
-      headers: { 'content-type': 'application/x-www-form-urlencoded' },
+      headers: { "content-type": "application/x-www-form-urlencoded" },
       data: qs.stringify({
         grant_type: "refresh_token",
         refresh_token: refreshToken,

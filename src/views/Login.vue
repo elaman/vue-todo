@@ -2,12 +2,12 @@
   <div class="col-md-3 py-3">
     <h1 class="display-4 mb-5 text-center">Login</h1>
 
-    <form @submit.prevent="handleSubmit" class=" text-center">
+    <form @submit.prevent="handleSubmit" class="text-center">
       <div class="form-group">
         <input type="text" v-model="username" class="form-control" placeholder="Username" />
       </div>
       <div class="form-group">
-        <input type="password" v-model="password" class="form-control" placeholder="Password">
+        <input type="password" v-model="password" class="form-control" placeholder="Password" />
       </div>
       <button type="submit" class="btn btn-primary">Login</button>
     </form>
@@ -34,7 +34,7 @@ export default {
       "authenticationErrorCode"
     ])
   },
-  
+
   methods: {
     ...mapActions("auth", ["login"]),
     handleSubmit() {

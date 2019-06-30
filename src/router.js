@@ -20,7 +20,7 @@ const router = new Router({
       name: "login",
       component: Login,
       meta: {
-        public: true, // Allow access to even if not logged in
+        public: true,
         onlyWhenLoggedOut: true
       }
     }

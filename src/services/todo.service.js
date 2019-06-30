@@ -20,10 +20,7 @@ const TodoService = {
         completed: node.field_completed[0].value
       }));
     } catch (error) {
-      throw new TodoError(
-        error.response.status,
-        error.response.data.detail
-      );
+      throw new TodoError(error.response.status, error.response.data.detail);
     }
   },
 
@@ -33,7 +30,7 @@ const TodoService = {
     const requestData = {
       method: "post",
       url: "/node?_format=json",
-      headers: { 'X-CSRF-Token': csrfToken },
+      headers: { "X-CSRF-Token": csrfToken },
       data: {
         type: "todo",
         title: [todo.title],
@@ -50,10 +47,7 @@ const TodoService = {
         completed: response.data.field_completed[0].value
       };
     } catch (error) {
-      throw new TodoError(
-        error.response.status,
-        error.response.data.detail
-      );
+      throw new TodoError(error.response.status, error.response.data.detail);
     }
   },
 
@@ -63,7 +57,7 @@ const TodoService = {
     const requestData = {
       method: "patch",
       url: `/node/${todo.id}?_format=json`,
-      headers: { 'X-CSRF-Token': csrfToken },
+      headers: { "X-CSRF-Token": csrfToken },
       data: {
         type: "todo",
         title: [todo.title],
@@ -77,13 +71,10 @@ const TodoService = {
       return {
         id: response.data.nid[0].value,
         title: response.data.title[0].value,
-        completed: response.data.status[0].value,
+        completed: response.data.status[0].value
       };
     } catch (error) {
-      throw new TodoError(
-        error.response.status,
-        error.response.data.detail
-      );
+      throw new TodoError(error.response.status, error.response.data.detail);
     }
   },
 
@@ -93,16 +84,13 @@ const TodoService = {
     const requestData = {
       method: "delete",
       url: `/node/${todo.id}?_format=json`,
-      headers: { 'X-CSRF-Token': csrfToken }
+      headers: { "X-CSRF-Token": csrfToken }
     };
 
     try {
       await ApiService.customRequest(requestData);
     } catch (error) {
-      throw new TodoError(
-        error.response.status,
-        error.response.data.detail
-      );
+      throw new TodoError(error.response.status, error.response.data.detail);
     }
   },
 
@@ -112,12 +100,9 @@ const TodoService = {
 
       return response.data;
     } catch (error) {
-      throw new TodoError(
-        error.response.status,
-        error.response.data.detail
-      );
+      throw new TodoError(error.response.status, error.response.data.detail);
     }
-  },
+  }
 };
 
 export default TodoService;
