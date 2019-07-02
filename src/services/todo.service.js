@@ -96,19 +96,6 @@ const TodoService = {
     } catch (error) {
       throw new TodoError(error.response.status, error.response.message);
     }
-  },
-
-  getCsrfToken: async function() {
-    try {
-      // CSRF token request doesn't require special request.
-      // Returns string, not JSON.
-      // Please see README.md for details.
-      const response = await ApiService.get("/session/token");
-
-      return response.data;
-    } catch (error) {
-      throw new TodoError(error.response.status, error.response.message);
-    }
   }
 };
 
