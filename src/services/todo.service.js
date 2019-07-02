@@ -51,9 +51,9 @@ const TodoService = {
       const response = await ApiService.customRequest(requestData);
 
       return {
-        id: response.data.nid[0].value,
-        title: response.data.title[0].value,
-        completed: response.data.field_completed[0].value
+        id: response.data.data.id,
+        title: response.data.data.attributes.title,
+        completed: response.data.data.attributes.field_completed
       };
     } catch (error) {
       throw new TodoError(error.response.status, error.response.message);
@@ -81,9 +81,9 @@ const TodoService = {
       const response = await ApiService.customRequest(requestData);
 
       return {
-        id: response.data.nid[0].value,
-        title: response.data.title[0].value,
-        completed: response.data.status[0].value
+        id: response.data.data.id,
+        title: response.data.data.attributes.title,
+        completed: response.data.data.attributes.field_completed
       };
     } catch (error) {
       throw new TodoError(error.response.status, error.response.message);
