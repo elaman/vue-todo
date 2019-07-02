@@ -35,16 +35,15 @@ const TodoService = {
     const requestData = {
       method: "post",
       url: "/jsonapi/node/todo",
-      headers: {
-        "Content-Type": "application/vnd.api+json",
-        "Accept": "application/vnd.api+json"
-      },
+      headers: { "Content-Type": "application/vnd.api+json" },
       data: {
-        // type is required.
-        type: "todo",
-        // fields values must be in array.
-        title: todo.title,
-        field_completed: false
+        data: {
+          type: "node--todo",
+        },
+        attributes: {
+          title: todo.title,
+          field_completed: false
+        }
       }
     };
 
@@ -97,7 +96,7 @@ const TodoService = {
 
     const requestData = {
       method: "delete",
-      url: `/node/${todo.id}?_format=json`,
+      url: `/jsonapi/node/todo${todo.id}`,
       headers: { "X-CSRF-Token": csrfToken }
     };
 
