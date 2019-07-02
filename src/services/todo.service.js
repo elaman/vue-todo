@@ -19,12 +19,12 @@ const TodoService = {
   getAll: async function() {
     try {
       // GET request to get all todos, doesn't require special request.
-      const response = await ApiService.get("/node/todos?_format=json");
+      const response = await ApiService.get("/jsonapi/node/todo");
 
-      return response.data.map(node => ({
-        id: node.nid[0].value,
-        title: node.title[0].value,
-        completed: node.field_completed[0].value
+      return response.data.data.map(node => ({
+        id: node.id,
+        title: node.attributes.title,
+        completed: node.attributes.field_completed
       }));
     } catch (error) {
       throw new TodoError(error.response.status, error.response.message);
@@ -32,19 +32,18 @@ const TodoService = {
   },
 
   insert: async function(todo) {
-    // POST request needs csrf token. See method definition for details.
-    const csrfToken = await this.getCsrfToken();
-
     const requestData = {
       method: "post",
-      url: "/node?_format=json",
-      headers: { "X-CSRF-Token": csrfToken },
+      url: "/jsonapi/node/todo",
+      headers: { "Content-Type": "application/vnd.api+json" },
       data: {
-        // type is required.
-        type: "todo",
-        // fields values must be in array.
-        title: [todo.title],
-        field_completed: [false]
+        data: {
+          type: "node--todo",
+          attributes: {
+            title: todo.title,
+            field_completed: false
+          }
+        }
       }
     };
 
@@ -52,9 +51,9 @@ const TodoService = {
       const response = await ApiService.customRequest(requestData);
 
       return {
-        id: response.data.nid[0].value,
-        title: response.data.title[0].value,
-        completed: response.data.field_completed[0].value
+        id: response.data.data.id,
+        title: response.data.data.attributes.title,
+        completed: response.data.data.attributes.field_completed
       };
     } catch (error) {
       throw new TodoError(error.response.status, error.response.message);
@@ -62,19 +61,19 @@ const TodoService = {
   },
 
   update: async function(todo) {
-    // PATCH request needs csrf token. See method definition for details.
-    const csrfToken = await this.getCsrfToken();
-
     const requestData = {
       method: "patch",
-      url: `/node/${todo.id}?_format=json`,
-      headers: { "X-CSRF-Token": csrfToken },
+      url: `/jsonapi/node/todo/${todo.id}`,
+      headers: { "Content-Type": "application/vnd.api+json" },
       data: {
-        // type is required.
-        type: "todo",
-        // fields values must be in array.
-        title: [todo.title],
-        field_completed: [todo.completed]
+        data: {
+          type: "node--todo",
+          id: todo.id,
+          attributes: {
+            title: todo.title,
+            field_completed: false
+          }
+        }
       }
     };
 
@@ -82,9 +81,9 @@ const TodoService = {
       const response = await ApiService.customRequest(requestData);
 
       return {
-        id: response.data.nid[0].value,
-        title: response.data.title[0].value,
-        completed: response.data.status[0].value
+        id: response.data.data.id,
+        title: response.data.data.attributes.title,
+        completed: response.data.data.attributes.field_completed
       };
     } catch (error) {
       throw new TodoError(error.response.status, error.response.message);
@@ -92,30 +91,8 @@ const TodoService = {
   },
 
   delete: async function(todo) {
-    // DELETE request needs csrf token. See method definition for details.
-    const csrfToken = await this.getCsrfToken();
-
-    const requestData = {
-      method: "delete",
-      url: `/node/${todo.id}?_format=json`,
-      headers: { "X-CSRF-Token": csrfToken }
-    };
-
     try {
-      await ApiService.customRequest(requestData);
-    } catch (error) {
-      throw new TodoError(error.response.status, error.response.message);
-    }
-  },
-
-  getCsrfToken: async function() {
-    try {
-      // CSRF token request doesn't require special request.
-      // Returns string, not JSON.
-      // Please see README.md for details.
-      const response = await ApiService.get("/session/token");
-
-      return response.data;
+      await ApiService.delete(`/jsonapi/node/todo/${todo.id}`);
     } catch (error) {
       throw new TodoError(error.response.status, error.response.message);
     }
