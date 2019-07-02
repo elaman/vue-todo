@@ -19,12 +19,12 @@ const TodoService = {
   getAll: async function() {
     try {
       // GET request to get all todos, doesn't require special request.
-      const response = await ApiService.get("/node/todos?_format=json");
+      const response = await ApiService.get("/jsonapi/node/todo");
 
-      return response.data.map(node => ({
-        id: node.nid[0].value,
-        title: node.title[0].value,
-        completed: node.field_completed[0].value
+      return response.data.data.map(node => ({
+        id: node.id,
+        title: node.attributes.title,
+        completed: node.attributes.field_completed
       }));
     } catch (error) {
       throw new TodoError(error.response.status, error.response.message);
