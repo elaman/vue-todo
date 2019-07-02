@@ -32,12 +32,13 @@ const TodoService = {
   },
 
   insert: async function(todo) {
-    // POST request needs csrf token. See method definition for details.
-    const csrfToken = await this.getCsrfToken();
-
     const requestData = {
       method: "post",
       url: "/jsonapi/node/todo",
+      headers: {
+        "Content-Type": "application/vnd.api+json",
+        "Accept": "application/vnd.api+json"
+      },
       data: {
         // type is required.
         type: "todo",
