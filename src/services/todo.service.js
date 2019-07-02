@@ -39,10 +39,10 @@ const TodoService = {
       data: {
         data: {
           type: "node--todo",
-        },
-        attributes: {
-          title: todo.title,
-          field_completed: false
+          attributes: {
+            title: todo.title,
+            field_completed: false
+          }
         }
       }
     };
@@ -61,19 +61,19 @@ const TodoService = {
   },
 
   update: async function(todo) {
-    // PATCH request needs csrf token. See method definition for details.
-    const csrfToken = await this.getCsrfToken();
-
     const requestData = {
       method: "patch",
-      url: `/node/${todo.id}?_format=json`,
-      headers: { "X-CSRF-Token": csrfToken },
+      url: `/jsonapi/node/todo/${todo.id}`,
+      headers: { "Content-Type": "application/vnd.api+json" },
       data: {
-        // type is required.
-        type: "todo",
-        // fields values must be in array.
-        title: [todo.title],
-        field_completed: [todo.completed]
+        data: {
+          type: "node--todo",
+          id: todo.id,
+          attributes: {
+            title: todo.title,
+            field_completed: false
+          }
+        }
       }
     };
 
@@ -91,17 +91,8 @@ const TodoService = {
   },
 
   delete: async function(todo) {
-    // DELETE request needs csrf token. See method definition for details.
-    const csrfToken = await this.getCsrfToken();
-
-    const requestData = {
-      method: "delete",
-      url: `/jsonapi/node/todo${todo.id}`,
-      headers: { "X-CSRF-Token": csrfToken }
-    };
-
     try {
-      await ApiService.customRequest(requestData);
+      await ApiService.delete(`/jsonapi/node/todo/${todo.id}`);
     } catch (error) {
       throw new TodoError(error.response.status, error.response.message);
     }
