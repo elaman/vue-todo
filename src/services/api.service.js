@@ -41,13 +41,16 @@ const ApiService = {
   // Intercept 401 Authentication errors and process them:
   // - If it is during login, then clean up auth store, user can try again.
   // - If it is other request, then try to refresh the access token.
+  // IMPORTANT NOTE:
+  // Drupal returns 403 code instead of 401. Here I will check against 403,
+  // but leave the name 401, as it should be by convention.
   mount401Interceptor() {
     this._401interceptor = axios.interceptors.response.use(
       response => {
         return response;
       },
       async error => {
-        if (error.request.status === 401) {
+        if (error.request.status === 403) {
           if (error.config.url.includes("/oauth/token")) {
             store.dispatch("auth/logout");
             throw error;
