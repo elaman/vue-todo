@@ -71,7 +71,7 @@ const TodoService = {
           id: todo.id,
           attributes: {
             title: todo.title,
-            field_completed: false
+            field_completed: todo.completed
           }
         }
       }
