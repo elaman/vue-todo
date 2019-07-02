@@ -1,3 +1,5 @@
+[![Netlify Status](https://api.netlify.com/api/v1/badges/45274e25-8717-4a51-8650-4cabb838aea5/deploy-status)](https://app.netlify.com/sites/vue-drupal-todo/deploys)
+
 
 # Drupal
 
