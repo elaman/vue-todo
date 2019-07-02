@@ -37,14 +37,13 @@ const TodoService = {
 
     const requestData = {
       method: "post",
-      url: "/node?_format=json",
-      headers: { "X-CSRF-Token": csrfToken },
+      url: "/jsonapi/node/todo",
       data: {
         // type is required.
         type: "todo",
         // fields values must be in array.
-        title: [todo.title],
-        field_completed: [false]
+        title: todo.title,
+        field_completed: false
       }
     };
 
